@@ -11,7 +11,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_adaptivepractice';
-$plugin->version = 2026030902; // Added Random Counts support.
+$plugin->version = 2026030905; // Added Random Counts support.
 $plugin->requires = 2022041900; // Requires Moodle 4.0 minimum
 $plugin->supported = [400, 502]; // Supported from Moodle 4.0 to 5.2+
 $plugin->maturity = MATURITY_STABLE;

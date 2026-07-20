@@ -50,6 +50,13 @@ if (data_submitted() && confirm_sesskey()) {
     if ($action === 'setcategory') {
         $categoryids = optional_param_array('categoryids', [], PARAM_INT);
         
+        if (!empty($categoryids)) {
+            $existing_categoryids = helper::get_category_ids($adaptivepractice->id);
+            
+            // Merge with existing categories instead of replacing them
+            $categoryids = array_values(array_unique(array_merge($existing_categoryids, $categoryids)));
+        }
+
         $DB->delete_records('adaptivepractice_categories', ['adaptivepracticeid' => $adaptivepractice->id]);
 
         if (!empty($categoryids)) {
@@ -62,9 +69,6 @@ if (data_submitted() && confirm_sesskey()) {
                     'categoryid' => $catid
                 ]);
             }
-        } else {
-            $adaptivepractice->categoryid = 0;
-            $DB->update_record('adaptivepractice', $adaptivepractice);
         }
         redirect($PAGE->url, get_string('settings_saved', 'mod_adaptivepractice'), 2);
 
@@ -157,35 +161,8 @@ if (data_submitted() && confirm_sesskey()) {
                 $total_requested = $easy_count + $medium_count + $hard_count;
                 $total_available = count($questions);
 
-                // Clear existing tier tags from all questions in these categories first.
-                foreach ($questions as $q) {
-                    $qbe_id = $DB->get_field_sql(
-                        "SELECT qbe.id FROM {question_bank_entries} qbe
-                         JOIN {question_versions} qv ON qv.questionbankentryid = qbe.id
-                         WHERE qv.questionid = ?",
-                        [$q->id]
-                    );
-                    if ($qbe_id) {
-                        $currenttags = core_tag_tag::get_item_tags('core_question', 'question_bank_entry', $qbe_id);
-                        $newtags = [];
-                        $changed = false;
-                        foreach ($currenttags as $tag) {
-                            if (in_array(strtolower($tag->name), ['easy', 'medium', 'hard', 'ap_excluded'])) {
-                                $changed = true;
-                            } else {
-                                $newtags[] = $tag->name;
-                            }
-                        }
-                        if ($changed) {
-                            core_tag_tag::set_item_tags('core_question', 'question_bank_entry', $qbe_id, $systemcontext, $newtags);
-                        }
-                    }
-                }
 
-                // Refresh the questions list since we just untagged them.
-                $questions = helper::get_questions_with_tiers($selected_cat_ids);
-
-                // Separate questions into pools based on their category name.
+                // Step 2: Separate questions into pools based on their category name.
                 $easy_pool = [];
                 $medium_pool = [];
                 $hard_pool = [];
@@ -249,15 +226,10 @@ if (data_submitted() && confirm_sesskey()) {
                             [$q->id]
                         );
                         if ($qbe_id) {
-                            $currenttags = core_tag_tag::get_item_tags('core_question', 'question_bank_entry', $qbe_id);
-                            $newtags = [];
-                            foreach ($currenttags as $tag) {
-                                if (!in_array(strtolower($tag->name), ['easy', 'medium', 'hard', 'ap_excluded'])) {
-                                    $newtags[] = $tag->name;
-                                }
+                            foreach (['easy', 'medium', 'hard', 'ap_excluded'] as $t) {
+                                core_tag_tag::remove_item_tag('core_question', 'question_bank_entry', $qbe_id, $t, $systemcontext->id);
                             }
-                            $newtags[] = $tier;
-                            core_tag_tag::set_item_tags('core_question', 'question_bank_entry', $qbe_id, $systemcontext, $newtags);
+                            core_tag_tag::add_item_tag('core_question', 'question_bank_entry', $qbe_id, $systemcontext, $tier);
                             $assigned++;
                         }
                     }
