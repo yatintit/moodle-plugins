@@ -140,7 +140,7 @@ class view_page implements renderable, templatable
                         $a->has_badge      = true;
                         $a->badge_label    = '🥈 Silver Medal';
                         $a->badge_image_url = $base . 'silver.png';
-                        $a->badge_color    = '#8C9196';
+                        $a->badge_color    = '#C0C0C0';
                     } else if ($score_val >= 60) {
                         $a->has_badge      = true;
                         $a->badge_label    = '🥉 Bronze Medal';

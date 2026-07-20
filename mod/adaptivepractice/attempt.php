@@ -329,13 +329,12 @@ if ($current_slot !== null) {
     }
 
     if (!$already_answered) {
-        // This button proxies the question engine's Check button so process_all_actions()
-        // receives the grading signal. The native Check button is visually hidden via CSS.
-        echo html_writer::tag('button', get_string('submit_answer', 'mod_adaptivepractice'), [
-            'type'    => 'button',
-            'class'   => 'btn btn-primary btn-lg px-5',
-            'id'      => 'ap_submit_btn',
-            'onclick' => "var chk = document.querySelector('#ap_question_form .im-controls input[type=submit], #ap_question_form .im-controls button[type=submit]'); if (chk) { chk.click(); } else { document.getElementById('ap_question_form').submit(); }",
+        echo html_writer::empty_tag('input', [
+            'type' => 'submit',
+            'name' => 'submitanswer',
+            'value' => get_string('submit_answer', 'mod_adaptivepractice'),
+            'class' => 'btn btn-primary btn-lg px-5',
+            'id' => 'ap_submit_btn',
         ]);
     } else {
         // Already answered — show Next button.
