@@ -1,0 +1,454 @@
+/*
+ * Styles for Adaptive Practice
+ */
+
+/* General Intro Section */
+.mod_adaptivepractice_intro {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    margin-bottom: 2rem;
+}
+
+/* Question Engine Container Overrides - Scoped to this plugin only */
+.path-mod-adaptivepractice .que-container {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 20px;
+    border: 1px solid #eef2f7;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.path-mod-adaptivepractice .que-container:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.path-mod-adaptivepractice .que .content {
+    background: transparent !important;
+}
+
+.path-mod-adaptivepractice .que .formulation {
+    background: #f8fafc !important;
+    border-radius: 8px !important;
+    padding: 20px !important;
+}
+
+/* Button Styling - Enhancing theme defaults without overriding colors */
+.path-mod-adaptivepractice .btn-primary {
+    border-radius: 8px;
+    padding: 10px 25px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.path-mod-adaptivepractice .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.path-mod-adaptivepractice .btn-secondary {
+    border-radius: 8px;
+    padding: 10px 25px;
+    transition: all 0.2s;
+}
+
+.path-mod-adaptivepractice .btn-secondary:hover {
+    transform: translateY(-1px);
+}
+
+/* Competency Badge */
+.competency-badge {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 20px;
+    background: #fff;
+    font-weight: bold;
+    margin-top: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eef2f7;
+}
+
+/* Question feedback styling - Scoped to this plugin only */
+.path-mod-adaptivepractice .que.outcome {
+    margin-top: 15px;
+    border-radius: 10px;
+}
+
+.path-mod-adaptivepractice .que .correctness.correct {
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.path-mod-adaptivepractice .que .correctness.incorrect {
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.path-mod-adaptivepractice .alert-success,
+.path-mod-adaptivepractice .alert-danger,
+.path-mod-adaptivepractice .alert-info {
+    border-radius: 10px;
+    border: none;
+}
+
+/* Session UI Specifics */
+.ap-session-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 15px 40px;
+}
+
+.ap-difficulty-label {
+    padding: 3px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+}
+
+.ap-difficulty-label.easy {
+    background-color: #0FB9B1;
+}
+
+.ap-difficulty-label.medium {
+    background-color: #FF8A00;
+}
+
+.ap-difficulty-label.hard {
+    background-color: #6C5CE7;
+}
+
+.ap-difficulty-label.mixed {
+    background-color: #6366f1;
+}
+
+.ap-question-card {
+    border-radius: 14px;
+    border: none;
+}
+
+.ap-question-card .card-body {
+    padding: 30px 35px;
+}
+
+.ap-session-header h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+/* Dot Navigation in Sessions */
+.ap-dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+    border: 2px solid transparent;
+    transition: transform 0.15s;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.ap-dot:hover {
+    transform: scale(1.15);
+    text-decoration: none;
+}
+
+.ap-dot-unanswered {
+    background: #f1f5f9;
+    color: #64748b;
+    border-color: #cbd5e1;
+}
+
+.ap-dot-current {
+    background: #6366f1;
+    color: white;
+    border-color: #6366f1;
+}
+
+.ap-dot-correct {
+    background: #0FB9B1;
+    /* Using Easy/Success color */
+    color: white;
+}
+
+/* Report Styling */
+.mod_adaptivepractice_report .card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.mod_adaptivepractice_report .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08) !important;
+}
+
+
+
+.report-table-container .generaltable {
+    margin-bottom: 0;
+}
+
+.report-table-container .generaltable thead th {
+    background: #f8fafc;
+    border-bottom: 2px solid #dee2e6;
+    color: #495057;
+    font-weight: 700;
+}
+
+.report-table-container .generaltable tbody td {
+    vertical-align: middle;
+    padding: 15px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.report-table-container .generaltable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Filter and Export Styling */
+.report-filters label {
+    font-size: 0.7rem;
+    margin-bottom: 5px;
+}
+
+.report-filters form::after,
+.export-actions::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.ap-export-buttons .singlebutton {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.ap-export-buttons .singlebutton form {
+    margin: 0;
+}
+
+.ap-export-buttons button,
+.ap-export-buttons select {
+    border-radius: 8px !important;
+    font-size: 0.85rem !important;
+    padding: 6px 15px !important;
+}
+
+/* Initial Bars Styling */
+.report-initialbars {
+    border: 1px solid #eef2f7;
+}
+
+.report-initialbars .initialbar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.report-initialbars .initialbar label {
+    margin: 0;
+    font-weight: 700;
+    color: #475569;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.report-initialbars .initialbar .pagination {
+    margin: 0;
+}
+
+.report-initialbars .pagination .page-link {
+    border: none;
+    margin: 0 2px;
+    border-radius: 4px;
+    color: #6366f1;
+    font-weight: 500;
+}
+
+.report-initialbars .pagination .page-item.active .page-link {
+    background-color: #6366f1;
+    color: #fff;
+}
+
+.ap-export-buttons button {
+    background-color: #6366f1 !important;
+    border-color: #6366f1 !important;
+    color: #fff !important;
+    transition: background-color 0.2s;
+}
+
+.ap-export-buttons button:hover {
+    background-color: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+}
+
+.ap-export-buttons select {
+    border: 1px solid #e2e8f0 !important;
+    color: #475569 !important;
+}
+
+.report-table-container .table-primary {
+    background-color: #f0f7ff !important;
+}
+
+.report-table-container .table-primary td {
+    border-left: 4px solid #3b82f6 !important;
+}
+
+.path-mod-adaptivepractice .card {
+    border-radius: 12px;
+}
+
+/* Question management specific */
+.mod_adaptivepractice_questions .cat-selector-card {
+    border-top: 3px solid #10b981;
+}
+
+.mod_adaptivepractice_questions select[multiple] {
+    height: 180px !important;
+    /* Smaller size */
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.mod_adaptivepractice_questions select option {
+    padding: 8px 12px;
+    border-bottom: 1px solid #f8fafc;
+}
+
+.mod_adaptivepractice_questions .border-left {
+    border-left: 1px solid #eef2f7 !important;
+}
+
+/* Ensure table doesn't break layout */
+.report-table-container {
+    overflow-x: auto;
+    border-radius: 12px;
+}
+
+.mod_adaptivepractice_report table.generaltable {
+    width: 100% !important;
+    margin-bottom: 0;
+    table-layout: auto;
+}
+
+/* Ensure data wraps correctly to avoid excessive width */
+.mod_adaptivepractice_report .generaltable td,
+.mod_adaptivepractice_report .generaltable th {
+    padding: 12px 15px !important;
+}
+
+/* Analytics Cards Refinement */
+.mod_adaptivepractice_report .card {
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    min-height: 100px;
+}
+
+.mod_adaptivepractice_report .card .h2 {
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+.mod_adaptivepractice_report .small.text-muted {
+    font-size: 0.65rem;
+    letter-spacing: 0.8px;
+}
+
+#page-mod-adaptivepractice-report #region-main {
+    padding-bottom: 5rem !important;
+}
+
+.mod_adaptivepractice_report {
+    width: 100%;
+}
+
+.mod_adaptivepractice_report .report-table-container {
+    background: #fff;
+    border-radius: 12px;
+    margin-top: 1.5rem;
+    width: 100%;
+}
+
+/* Ensure Moodle's generaltable inside our container doesn't overlap */
+.mod_adaptivepractice_report .generaltable {
+    margin-bottom: 0 !important;
+    width: 100% !important;
+}
+
+.mod_adaptivepractice_report .report-stats .card {
+    border-radius: 12px;
+    transition: transform 0.2s;
+    border: 1px solid #eef2f7 !important;
+}
+
+.mod_adaptivepractice_report .report-stats .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.report-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Custom Explanation Box for Wrong Answers */
+.ap-explanation-box {
+    background-color: #fff9f0 !important;
+    border: 1px solid #fee2e2 !important;
+    border-left: 6px solid #ff8a00 !important;
+    border-radius: 12px !important;
+    color: #856404 !important;
+}
+
+.ap-explanation-box .text-muted {
+    color: #6c757d !important;
+}
+
+.ap-explanation-box .h3 {
+    color: #8a6d3b !important;
+    font-size: 1.4rem;
+}
+
+.ap-explanation-box p {
+    margin-bottom: 0.5rem;
+}
+
+#page-mod-adaptivepractice-attempt .outcome.clearfix {
+    display: none;
+}
+
+/* Visually hide the question engine's native "Check" button — our custom Submit Answer
+   button triggers it via JS so grading still works. Must NOT use display:none here
+   as the button needs to remain clickable by JavaScript. */
+#page-mod-adaptivepractice-attempt .im-controls input[type=submit],
+#page-mod-adaptivepractice-attempt .im-controls button[type=submit] {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(0,0,0,0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+#page-mod-adaptivepractice-attempt .im-controls {
+    line-height: 0;
+    font-size: 0;
+}
+
+/* Hide core question bank switcher sections that are not relevant to this simplified view */
+.mod_adaptivepractice_questions .recently-viewed-banks,
+.mod_adaptivepractice_questions .recently-viewed-banks + hr,
+.mod_adaptivepractice_questions .search-banks {
+    display: none !important;
+}

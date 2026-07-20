@@ -1,0 +1,137 @@
+{{!
+    Report page template for Adaptive Practice
+}}
+<div class="mod_adaptivepractice_report clearfix pb-4">
+    <div class="report-header mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                {{#backurl}}
+                <a href="{{backurl}}" class="btn btn-link px-0 text-muted">
+                    <i class="fa fa-chevron-left mr-1"></i> Back to Activity
+                </a>
+                {{/backurl}}
+            </div>
+        </div>
+    </div>
+
+    {{#stats}}
+    <div class="row mb-4 report-stats">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center py-3" style="border-radius: 12px; border-top: 3px solid #6366f1 !important;">
+                <div class="small text-muted font-weight-bold text-uppercase mb-2">Total Attempts</div>
+                <div class="h2 font-weight-bold mb-0 text-primary">{{total_attempts}}</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center py-3" style="border-radius: 12px; border-top: 3px solid #10b981 !important;">
+                <div class="small text-muted font-weight-bold text-uppercase mb-2">Unique Students</div>
+                <div class="h2 font-weight-bold mb-0 text-success">{{unique_students}}</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center py-3" style="border-radius: 12px; border-top: 3px solid #f59e0b !important;">
+                <div class="small text-muted font-weight-bold text-uppercase mb-2">Avg. Score</div>
+                <div class="h2 font-weight-bold mb-0 text-warning">{{avg_score}}%</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center py-3" style="border-radius: 12px; border-top: 3px solid #3b82f6 !important;">
+                <div class="small text-muted font-weight-bold text-uppercase mb-2">Finished</div>
+                <div class="h2 font-weight-bold mb-0 text-info">{{total_finished}}</div>
+            </div>
+        </div>
+        
+        <div class="col-md-12 text-right mt-3">
+            <a href="report.php?id={{id}}&treset=1" class="btn btn-outline-secondary btn-sm shadow-sm" style="border-radius: 20px;">
+                <i class="fa fa-refresh mr-1"></i> Reset Columns & Filters
+            </a>
+        </div>
+    </div>
+    {{/stats}}
+
+
+    {{#initialbars}}
+    <div class="report-initialbars mb-4 bg-white p-2 rounded shadow-sm">
+        {{{initialbars}}}
+    </div>
+    {{/initialbars}}
+
+    <div class="alert alert-info border-0 shadow-sm mb-5 mt-5" style="border-radius: 12px; background: #f0f7ff; border-left: 5px solid #3b82f6 !important; padding: 1.5rem;">
+        <i class="fa fa-info-circle mr-3 text-primary fa-lg"></i>
+        <span>Showing all student attempts. The best (highest) score for each user is <span class="badge badge-primary px-2 py-1">highlighted in blue</span>.</span>
+    </div>
+
+    <form action="report.php?id={{id}}" method="post" id="attempts-form">
+        <input type="hidden" name="sesskey" value="{{sesskey}}">
+        <div class="report-table-container table-responsive bg-white border rounded shadow-sm mb-4 p-0">
+            {{{tablehtml}}}
+        </div>
+
+        <div class="delete-actions mb-4">
+            <button type="submit" name="delete_selected" value="1" class="btn btn-danger shadow-sm" id="btn-delete-attempts" disabled>
+                <i class="fa fa-trash mr-1"></i> Delete selected attempts
+            </button>
+        </div>
+    </form>
+
+    {{#js}}
+    require(['jquery', 'core/notification', 'core/str'], function($, notification, str) {
+        var selectAll = $('#selectall-attempts');
+        var checkboxes = $('.attempt-checkbox');
+        var deleteBtn = $('#btn-delete-attempts');
+
+        selectAll.on('change', function() {
+            checkboxes.prop('checked', this.checked);
+            updateDeleteButton();
+        });
+
+        checkboxes.on('change', function() {
+            if (!this.checked) {
+                selectAll.prop('checked', false);
+            } else if (checkboxes.filter(':checked').length === checkboxes.length) {
+                selectAll.prop('checked', true);
+            }
+            updateDeleteButton();
+        });
+
+        function updateDeleteButton() {
+            var count = checkboxes.filter(':checked').length;
+            deleteBtn.prop('disabled', count === 0);
+        }
+
+        $('#attempts-form').on('submit', function(e) {
+            if ($(e.originalEvent.submitter).attr('name') === 'delete_selected') {
+                e.preventDefault();
+                var count = checkboxes.filter(':checked').length;
+                
+                notification.confirm(
+                    'Confirm Deletion',
+                    'Are you sure you want to delete ' + count + ' selected attempt(s)? This action cannot be undone and user grades will be recalculated.',
+                    'Delete',
+                    'Cancel',
+                    function() {
+                        var form = $('#attempts-form');
+                        // Add a hidden input to simulate the button click for the actual form submission
+                        $('<input>').attr({
+                            type: 'hidden',
+                            name: 'delete_selected',
+                            value: '1'
+                        }).appendTo(form);
+                        form.get(0).submit();
+                    }
+                );
+            }
+        });
+    });
+    {{/js}}
+
+    {{#downloadhtml}}
+    <div class="ap-export-buttons text-center mb-5">
+        <hr class="my-4">
+        <div class="d-inline-block">
+            {{{downloadhtml}}}
+        </div>
+    </div>
+    {{/downloadhtml}}
+</div>
+

@@ -1,0 +1,280 @@
+{{!
+    Attempt summary template for Adaptive Practice
+}}
+<div class="mod_adaptivepractice_summary">
+    <div class="tertiary-navigation mb-4">
+        <a href="{{backurl}}" class="btn btn-secondary btn-sm">← {{#str}}back, mod_adaptivepractice{{/str}}</a>
+    </div>
+
+    <h2 class="mb-4 text-center">Session Summary</h2>
+
+    {{#score_below_70}}
+    <div class="ap-motivational-banner alert d-flex align-items-center justify-content-between flex-wrap mb-4"
+         style="background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+                border-left: 5px solid #f39c12;
+                border-radius: 10px;
+                padding: 16px 20px;
+                max-width: 800px;
+                margin: 0 auto 24px auto;
+                box-shadow: 0 2px 12px rgba(243,156,18,0.18);">
+        <div class="d-flex align-items-center" style="gap: 12px;">
+            <span style="font-size: 2rem;">💪</span>
+            <div>
+                <div style="font-weight: 700; font-size: 1.05rem; color: #856404;">Keep Going!</div>
+                <div style="color: #856404; font-size: 0.95rem;">
+                    Great job! Improve your score. Continue practicing.
+                </div>
+            </div>
+        </div>
+        <a href="{{continue_url}}"
+           class="btn btn-primary font-weight-bold mt-2 mt-md-0"
+           style="border-radius: 8px; padding: 8px 22px; font-size: 0.97rem; white-space: nowrap; box-shadow: 0 2px 8px rgba(67,97,238,0.35);">
+            🔄 Continue Practice
+        </a>
+    </div>
+    {{/score_below_70}}
+
+    {{#has_badge}}
+    <div class="ap-badge-banner d-flex align-items-center justify-content-center mb-4"
+         style="max-width: 800px; margin: 0 auto 20px auto;
+                background: linear-gradient(135deg, #fffdf0 0%, #fff8e1 100%);
+                border-radius: 14px;
+                padding: 18px 28px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+                gap: 20px;
+                flex-wrap: wrap;
+                border: 2px solid {{badge_color}};">
+        <img src="{{badge_image_url}}" alt="{{badge_name}}"
+             style="width: 72px; height: 72px; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));">
+        <div>
+            <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #888; font-weight: 600;">
+                Achievement Unlocked
+            </div>
+            <div style="font-size: 1.4rem; font-weight: 800; color: #1a1a2e; margin-top: 2px;">
+                {{badge_label}}
+            </div>
+            <div style="font-size: 0.9rem; color: #555; margin-top: 4px;">
+                Awarded for scoring <strong>{{score}}%</strong> — well done!
+            </div>
+        </div>
+    </div>
+    {{/has_badge}}
+
+    <div class="card shadow-sm border-0 mb-5" style="border-radius: 12px; max-width: 800px; margin: 0 auto;">
+        <div class="card-body p-4">
+            <div class="row text-center">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    {{{user.picture}}}
+                    <div class="font-weight-bold mt-2">{{user.fullname}}</div>
+                    <div class="small text-muted">{{user.date}}</div>
+                </div>
+
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="text-muted small text-uppercase font-weight-bold">Score</div>
+                    <div class="h1 font-weight-bold {{scorecolor}}" style="margin: 5px 0;">{{score}}%</div>
+                    <span class="badge badge-light">Difficulty: {{difficulty}}</span>
+                    {{#has_badge}}
+                    <div class="mt-2">
+                        <img src="{{badge_image_url}}" alt="{{badge_name}}"
+                             title="{{badge_label}}"
+                             style="width: 36px; height: 36px; object-fit: contain; vertical-align: middle;">
+                        <span style="font-size: 0.85rem; font-weight: 700; color: #555; vertical-align: middle; margin-left: 4px;">{{badge_label}}</span>
+                    </div>
+                    {{/has_badge}}
+                </div>
+
+                <div class="col-md-4">
+                    <div class="text-muted small text-uppercase font-weight-bold">Status</div>
+                    <div class="badge {{statusclass}} px-3 py-2 mt-2" style="font-size: 1rem;">{{status}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ap-review-questions" style="max-width: 850px; margin: 0 auto;">
+        <h4 class="mb-4">Question Breakdown</h4>
+
+        {{#questions}}
+        <div class="card mb-4 shadow-sm border-0" style="border-radius: 10px; overflow: hidden;">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center py-2">
+                <span class="font-weight-bold">Question {{slot}}</span>
+                <span class="badge {{badgeclass}}">{{mark}} / {{max}}</span>
+            </div>
+            <div class="card-body">
+                {{{content}}}
+            </div>
+        </div>
+        {{/questions}}
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         BOTTOM ACTION BAR  (end of page — student has finished
+         reading all questions and needs a clear next step)
+    ═══════════════════════════════════════════════════════ -->
+    <div class="ap-bottom-action-bar"
+         style="max-width:850px; margin:32px auto 8px auto;
+                display:flex; flex-wrap:wrap; justify-content:center; gap:12px;
+                padding:24px 16px;
+                border-top:2px solid #eef2ff;
+                background:linear-gradient(135deg,#fafbff 0%,#f4f6ff 100%);
+                border-radius:0 0 14px 14px;">
+
+        <!-- Label -->
+        <div style="width:100%; text-align:center; font-size:0.82rem;
+                    font-weight:700; letter-spacing:1px; text-transform:uppercase;
+                    color:#7c8ab8; margin-bottom:4px;">Ready for more?</div>
+
+        {{#score_is_100}}
+        <!-- Primary: go to next difficulty (only for medal earners) -->
+        <a href="{{next_url}}"
+           class="btn font-weight-bold"
+           style="border-radius:12px; padding:11px 28px; font-size:1rem; color:#fff;
+                  background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+                  border:none; box-shadow:0 4px 16px rgba(102,126,234,0.4);
+                  transition:transform .2s,box-shadow .2s; text-decoration:none;"
+           onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 22px rgba(102,126,234,0.55)';"
+           onmouseout="this.style.transform='';this.style.boxShadow='0 4px 16px rgba(102,126,234,0.4)';">
+            🚀 {{popup_next}}
+        </a>
+        {{/score_is_100}}
+
+        <!-- Practise Again: restart same difficulty -->
+        <a href="{{practise_again_url}}"
+           class="btn btn-outline-success font-weight-bold"
+           style="border-radius:12px; padding:11px 26px; font-size:1rem;
+                  transition:transform .2s; text-decoration:none;"
+           onmouseover="this.style.transform='translateY(-2px)';"
+           onmouseout="this.style.transform='';">
+            🔄 Practise Again
+        </a>
+
+        <!-- Back to Top: smooth scroll so student does not have to scroll manually -->
+        <button onclick="window.scrollTo({top:0,behavior:'smooth'});"
+                class="btn btn-outline-secondary font-weight-bold"
+                style="border-radius:12px; padding:11px 26px; font-size:1rem;
+                       transition:transform .2s;"
+                onmouseover="this.style.transform='translateY(-2px)';"
+                onmouseout="this.style.transform='';">
+            ⬆️ Back to Top
+        </button>
+    </div>
+    <!-- ═══════════════════════ END BOTTOM BAR ═══════════════════ -->
+
+</div>
+
+{{#score_is_100}}
+<!-- Achievement Popup Modal — shown for Gold (≥90%), Silver (≥75%), Bronze (≥60%) -->
+<div id="ap-achievement-modal-overlay"
+     style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.60);
+            z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+
+    <div id="ap-achievement-modal-box"
+         style="background: #fff; border-radius: 22px; max-width: 480px; width: 92%;
+                padding: 40px 32px 32px; box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+                text-align: center; position: relative;
+                animation: apPopIn 0.45s cubic-bezier(.17,.67,.45,1.3) both;">
+
+        <!-- Close button -->
+        <button onclick="document.getElementById('ap-achievement-modal-overlay').style.display='none';"
+                style="position:absolute;top:14px;right:18px;background:none;border:none;
+                       font-size:1.5rem;cursor:pointer;color:#aaa;line-height:1;
+                       transition:color .2s;" onmouseover="this.style.color='#333'" onmouseout="this.style.color='#aaa'"
+                aria-label="Close">✕</button>
+
+        <!-- Celebration emoji -->
+        <div style="font-size: 3.8rem; line-height: 1; margin-bottom: 12px;
+                    animation: apPopIn 0.5s ease 0.1s both;">🎊</div>
+
+        {{#has_badge}}
+        <!-- Medal badge -->
+        <div style="margin-bottom: 18px;">
+            <img src="{{badge_image_url}}" alt="{{badge_name}}"
+                 style="width: 96px; height: 96px; object-fit: contain;
+                        filter: drop-shadow(0 8px 18px rgba(0,0,0,0.22));
+                        animation: apBadgeBounce 0.9s ease 0.3s both;">
+            <div style="display:inline-block; margin-top:10px; padding: 4px 18px;
+                        border-radius: 20px; font-size: 1rem; font-weight: 800;
+                        background: {{badge_color}}22; color: {{badge_color}};
+                        border: 2px solid {{badge_color}};">
+                {{badge_label}}
+            </div>
+        </div>
+        {{/has_badge}}
+        {{^has_badge}}
+        <div style="font-size: 2.5rem; margin-bottom: 12px;">🏅</div>
+        {{/has_badge}}
+
+        <!-- Title -->
+        <h3 style="color: #1a1a2e; font-weight: 800; font-size: 1.5rem; margin: 0 0 12px;">
+            {{popup_title}}
+        </h3>
+
+        <!-- Message -->
+        <p style="color: #666; font-size: 0.97rem; line-height: 1.7; margin-bottom: 28px;">
+            {{popup_message}}
+        </p>
+
+        <!-- Action buttons -->
+        <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+            <!-- Primary: go to next difficulty level -->
+            <a href="{{next_url}}"
+               id="ap-modal-btn-next"
+               class="btn font-weight-bold"
+               style="border-radius: 12px; padding: 11px 28px; font-size: 1rem; color:#fff;
+                      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                      border: none; box-shadow: 0 4px 18px rgba(102,126,234,0.45);
+                      transition: transform .2s, box-shadow .2s; text-decoration:none;">
+                🚀 {{popup_next}}
+            </a>
+            <!-- Secondary: go back to view page to pick a different skill/activity -->
+            <a href="{{choose_skill_url}}"
+               id="ap-modal-btn-skill"
+               class="btn btn-outline-secondary font-weight-bold"
+               style="border-radius:12px; padding:11px 24px; font-size:1rem;
+                      transition: transform .2s; text-decoration:none;">
+                🎯 Choose Next Skill
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes apPopIn {
+    from { opacity: 0; transform: scale(0.72) translateY(28px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes apBadgeBounce {
+    0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+    65%  { transform: scale(1.18) rotate(6deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+#ap-modal-btn-next:hover  { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(102,126,234,0.55); }
+#ap-modal-btn-skill:hover { transform: translateY(-2px); }
+</style>
+
+<script>
+(function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        var overlay = document.getElementById('ap-achievement-modal-overlay');
+        if (overlay) {
+            // Small delay so the page renders first, then the popup glides in.
+            setTimeout(function() { overlay.style.display = 'flex'; }, 350);
+        }
+    });
+    // Close on backdrop click.
+    document.addEventListener('click', function(e) {
+        var overlay = document.getElementById('ap-achievement-modal-overlay');
+        if (overlay && e.target === overlay) {
+            overlay.style.display = 'none';
+        }
+    });
+    // Close on Escape key.
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            var overlay = document.getElementById('ap-achievement-modal-overlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+    });
+})();
+</script>
+{{/score_is_100}}
