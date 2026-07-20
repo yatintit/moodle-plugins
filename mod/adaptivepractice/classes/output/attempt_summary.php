@@ -77,28 +77,61 @@ class attempt_summary implements renderable, templatable
         $data->score_below_70 = ($this->attempt->score < 70);
         $data->continue_url = (new moodle_url('/mod/adaptivepractice/view.php', ['id' => $this->cm->id]))->out(false);
 
-        // Score = 100 popup: show a congratulation message based on the current difficulty level.
-        $data->score_is_100 = ($this->attempt->score >= 100);
+        // Course / skill-chooser URL for the "Choose Next Skill" button.
+        $data->choose_skill_url = (new moodle_url('/mod/adaptivepractice/view.php', ['id' => $this->cm->id]))->out(false);
+
+        // Achievement popup: show for every medal earner (score >= 60) with per-difficulty messaging.
+        // Popup is shown for Gold (>=90), Silver (>=75), and Bronze (>=60).
+        $score         = $this->attempt->score;
+        $currentDiff   = strtolower($this->attempt->current_difficulty);
+        $data->score_is_100 = ($score >= 60); // Re-used mustache flag — now means "has achievement popup"
+
         if ($data->score_is_100) {
-            $currentDifficulty = strtolower($this->attempt->current_difficulty);
-            if ($currentDifficulty === 'easy') {
-                $data->popup_title = '🎉 Easy Level Passed!';
-                $data->popup_message = 'Congratulations! You have passed the Easy level. You can now practice Medium level questions to continue your learning journey.';
-                $data->popup_next = 'Try Medium Level';
-            } else if ($currentDifficulty === 'medium') {
-                $data->popup_title = '🏆 Medium Level Passed!';
-                $data->popup_message = 'Amazing work! You have mastered the Medium level. Challenge yourself with Hard level questions to reach the next milestone!';
-                $data->popup_next = 'Try Hard Level';
-            } else if ($currentDifficulty === 'hard') {
-                $data->popup_title = '🌟 Hard Level Conquered!';
-                $data->popup_message = 'Outstanding! You have completed the Hard level. Keep practising across all levels to achieve full mastery!';
-                $data->popup_next = 'Full Practice';
+            // Build next-difficulty URL (pre-selects difficulty in the practice form).
+            if ($currentDiff === 'easy') {
+                $data->popup_title   = '🎉 Easy Level Passed!';
+                $data->popup_message = 'Great job! You passed the Easy level. Ready to step it up? Try Medium level questions to continue your learning journey.';
+                $data->popup_next    = 'Try Medium Level';
+                $data->next_url      = (new moodle_url('/mod/adaptivepractice/attempt.php', [
+                    'id'               => $this->cm->id,
+                    'force_difficulty' => 'medium',
+                ]))->out(false);
+            } else if ($currentDiff === 'medium') {
+                $data->popup_title   = '🏆 Medium Level Passed!';
+                $data->popup_message = 'Amazing work! You mastered the Medium level. Challenge yourself with Hard level questions to reach the next milestone!';
+                $data->popup_next    = 'Try Hard Level';
+                $data->next_url      = (new moodle_url('/mod/adaptivepractice/attempt.php', [
+                    'id'               => $this->cm->id,
+                    'force_difficulty' => 'hard',
+                ]))->out(false);
+            } else if ($currentDiff === 'hard') {
+                $data->popup_title   = '🌟 Hard Level Conquered!';
+                $data->popup_message = 'Outstanding! You completed the Hard level. Keep practising across all levels to achieve full mastery!';
+                $data->popup_next    = 'Full Practice';
+                $data->next_url      = (new moodle_url('/mod/adaptivepractice/attempt.php', [
+                    'id'               => $this->cm->id,
+                    'force_difficulty' => 'mixed',
+                ]))->out(false);
             } else {
-                $data->popup_title = '🥇 Perfect Score!';
-                $data->popup_message = 'Incredible! You scored 100%. Keep practising to maintain your mastery!';
-                $data->popup_next = 'Continue Practising';
+                // Mixed / random session.
+                $data->popup_title   = '🥇 Excellent Score!';
+                $data->popup_message = 'Incredible result! You scored ' . round($score, 1) . '%. Keep practising to sharpen your mastery!';
+                $data->popup_next    = 'Continue Practising';
+                $data->next_url      = (new moodle_url('/mod/adaptivepractice/attempt.php', [
+                    'id'               => $this->cm->id,
+                    'force_difficulty' => 'mixed',
+                ]))->out(false);
             }
         }
+
+        // Practise Again URL — restart the same difficulty level directly.
+        $data->practise_again_url = (new moodle_url('/mod/adaptivepractice/attempt.php', [
+            'id'               => $this->cm->id,
+            'force_difficulty' => $currentDiff ?: 'mixed',
+        ]))->out(false);
+
+        // Activity view page URL — used by "Back to Activity" button.
+        $data->view_url = (new moodle_url('/mod/adaptivepractice/view.php', ['id' => $this->cm->id]))->out(false);
 
         // Badge logic: Bronze (60–74), Silver (75–89.5), Gold (≥90).
         $badge = $this->get_badge_info($this->attempt->score);
@@ -168,7 +201,7 @@ class attempt_summary implements renderable, templatable
                 'has_badge' => true,
                 'name'      => 'Silver Medal',
                 'label'     => '🥈 Silver Medal',
-                'color'     => '#C0C0C0',
+                'color'     => '#8C9196',
                 'image_url' => $base . 'silver.png',
             ];
         } else if ($score >= 60) {

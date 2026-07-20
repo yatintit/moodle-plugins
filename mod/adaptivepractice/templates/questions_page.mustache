@@ -88,7 +88,7 @@
                                 </div>
                             </details>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block shadow-sm" {{#has_attempts}}disabled{{/has_attempts}}>Add Categories</button>
+                        <button type="submit" class="btn btn-primary btn-block shadow-sm" {{#has_attempts}}disabled{{/has_attempts}}>Save Categories</button>
                         <p class="small text-muted mt-2 mb-0"><i class="fa fa-info-circle"></i> Ctrl+Click to select multiple.</p>
                     </form>
                 </div>
@@ -154,21 +154,33 @@
             <input type="hidden" name="action" value="savetiers">
 
             <div class="card shadow-sm mb-4 border-0" style="border-radius: 12px; overflow: hidden;">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                    <h5 class="mb-0 font-weight-bold d-flex justify-content-between w-100">
-                        <span>Step 3: Assign Difficulty Tiers</span>
-                        {{^is_random_source}}
-                        <span class="badge badge-success px-2 py-1" style="font-size: 0.7rem;">ACTIVE MODE</span>
-                        {{/is_random_source}}
-                    </h5>
-                    
-                    <div class="form-inline">
-                        <span class="small text-muted mr-2">Show: </span>
-                        <select onchange="window.location.href='?id={{id}}&filter='+this.value" class="form-control form-control-sm custom-select" style="border-radius: 5px;">
-                            {{#filteroptions}}
-                            <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
-                            {{/filteroptions}}
-                        </select>
+                <div class="card-header bg-white py-3">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center" style="gap: 15px;">
+                        <h5 class="mb-0 font-weight-bold">
+                            <span>Step 3: Assign Difficulty Tiers</span>
+                            {{^is_random_source}}
+                            <span class="badge badge-success px-2 py-1 ml-2" style="font-size: 0.7rem; vertical-align: middle;">ACTIVE MODE</span>
+                            {{/is_random_source}}
+                        </h5>
+                        
+                        <div class="d-flex align-items-center" style="gap: 15px;">
+                            <!-- Real-time Search Input -->
+                            <div class="input-group input-group-sm" style="max-width: 250px;">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-white border-right-0"><i class="fa fa-search text-muted"></i></span>
+                                </div>
+                                <input type="text" id="ap_question_search" class="form-control form-control-sm border-left-0" placeholder="Search questions..." style="border-radius: 0 5px 5px 0;">
+                            </div>
+                            
+                            <div class="form-inline">
+                                <span class="small text-muted mr-2">Show: </span>
+                                <select onchange="window.location.href='?id={{id}}&filter='+this.value" class="form-control form-control-sm custom-select" style="border-radius: 5px;">
+                                    {{#filteroptions}}
+                                    <option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+                                    {{/filteroptions}}
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -257,6 +269,7 @@
 
 {{#js}}
 require(['jquery'], function($) {
+
     // Intercept bank switcher links.
     $('#ap_bank_switcher_container').on('click', '[data-newmodid]', function(e) {
         e.preventDefault();
@@ -281,6 +294,20 @@ require(['jquery'], function($) {
             $('html, body').animate({ scrollTop: $('#ap_autoassign_warning').offset().top - 100 }, 400);
             return false;
         }
+    });
+
+    // Step 3 client-side real-time question filter.
+    $('#ap_question_search').on('keyup input', function() {
+        var query = $(this).val().toLowerCase().trim();
+        $('.table-hover tbody tr').each(function() {
+            var qname = $(this).find('td:nth-child(2)').text().toLowerCase();
+            var category = $(this).find('td:nth-child(3)').text().toLowerCase();
+            if (qname.indexOf(query) !== -1 || category.indexOf(query) !== -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
     });
 });
 {{/js}}
